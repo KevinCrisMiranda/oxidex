@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Oxidex – Atrapa los oxácidos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #131126;
+      --bg-grad: radial-gradient(circle at 50% 0%, #2b235a 0%, #131126 70%);
+      --card: #1f1b3d;
+      --card-hi: #292450;
+      --ink: #ffffff;
+      --mut: #a7a0d6;
+      --pri: #7c5cff;
+      --pri-shadow: #4c32b8;
+      --sec: #00d4ff;
+      --sec-shadow: #0088a8;
+      --ok: #2ce68a;
+      --ok-shadow: #179957;
+      --bad: #ff5773;
+      --bad-shadow: #b52b42;
+      --gold: #ffcc33;
+      --gold-shadow: #c28e00;
+      --line: #3a336b;
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      background-image: var(--bg-grad);
+      color: var(--ink);
+      font-family: 'Nunito', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .bg-particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+      opacity: 0.35;
+    }
+
+    .bubble {
+      position: absolute;
+      bottom: -60px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(124, 92, 255, 0.5), rgba(0, 212, 255, 0.1));
+      animation: rise linear infinite;
+    }
+
+    @keyframes rise {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0;
+      }
+
+      20% {
+        opacity: 0.8;
+      }
+
+      100% {
+        transform: translateY(-110vh) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 840px;
+      margin: 0 auto;
+      padding: 16px 16px 40px;
+    }
+
+    h1,
+    h2,
+    .f,
+    .game-title {
+      font-family: 'Fredoka', cursive, sans-serif;
+      letter-spacing: 0.4px;
+    }
+
+    h2 {
+      margin: 8px 0 4px;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .home {
+      text-align: center;
+      padding-top: 8vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .logo-badge {
+      width: 130px;
+      height: 130px;
+      border-radius: 36px;
+      background: linear-gradient(145deg, #2f2863, #1c173d);
+      border: 4px solid var(--pri);
+      box-shadow: 0 12px 0 var(--pri-shadow), 0 20px 40px rgba(124, 92, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 74px;
+      margin-bottom: 18px;
+      animation: floaty 3s ease-in-out infinite;
+    }
+
+    @keyframes floaty {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(-2deg);
+      }
+
+      50% {
+        transform: translateY(-10px) rotate(2deg);
+      }
+    }
+
+    .game-title {
+      font-size: clamp(44px, 10vw, 64px);
+      margin: 0;
+      background: linear-gradient(to bottom, #ffffff 30%, #b8a6ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 5px 0 #3f2b96);
+    }
+
+    .subtitle {
+      max-width: 440px;
+      color: var(--mut);
+      font-size: 16px;
+      line-height: 1.45;
+      margin: 10px 0 28px;
+    }
+
+    .btn {
+      font-family: 'Fredoka', sans-serif;
+      background: var(--pri);
+      color: #fff;
+      border: 0;
+      border-radius: 16px;
+      padding: 13px 24px;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 5px 0 var(--pri-shadow);
+      transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      user-select: none;
+    }
+
+    .btn:hover:not(:disabled) {
+      filter: brightness(1.08);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 var(--pri-shadow);
+    }
+
+    .btn.play-btn {
+      background: var(--ok);
+      color: #0b2e1c;
+      box-shadow: 0 6px 0 var(--ok-shadow), 0 12px 25px rgba(44, 230, 138, 0.35);
+      font-size: 21px;
+      padding: 16px 38px;
+      border-radius: 20px;
+    }
+
+    .btn.play-btn:active {
+      box-shadow: 0 1px 0 var(--ok-shadow);
+    }
+
+    .btn.fuse-btn {
+      background: linear-gradient(135deg, #00d4ff, #7c5cff);
+      box-shadow: 0 5px 0 #3a268f, 0 8px 20px rgba(0, 212, 255, 0.3);
+      font-size: 18px;
+      padding: 14px 32px;
+    }
+
+    .btn.ghost {
+      background: var(--card);
+      color: var(--mut);
+      border: 2px solid var(--line);
+      box-shadow: 0 4px 0 #120f26;
+    }
+
+    .btn.ghost:active:not(:disabled) {
+      box-shadow: 0 1px 0 #120f26;
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      filter: grayscale(0.5);
+    }
+
+    .hud {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(31, 27, 61, 0.85);
+      backdrop-filter: blur(8px);
+      border: 2px solid var(--line);
+      border-radius: 18px;
+      padding: 8px 14px;
+      margin-bottom: 14px;
+    }
+
+    .hud-brand {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 19px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .hud-stats {
+      display: flex;
+      gap: 8px;
+    }
+
+    .pill {
+      background: #141129;
+      border: 2px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 13px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .pill.gold {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .pill.cyan {
+      border-color: var(--sec);
+      color: var(--sec);
+    }
+
+    nav {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    nav button {
+      flex: 1;
+      padding: 11px 10px;
+      font-size: 15px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      position: relative;
+      background: linear-gradient(180deg, var(--card-hi) 0%, var(--card) 100%);
+      border: 3px solid var(--line);
+      border-radius: 22px;
+      padding: 8px;
+      /* Reducido para dar más espacio a la foto */
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      box-shadow: 0 6px 0 #120f26;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: #5b50a6;
+    }
+
+    .card.sel {
+      border-color: var(--sec);
+      background: linear-gradient(180deg, #1d3c5e 0%, #1b2247 100%);
+      box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.35), 0 6px 0 #0d3a52;
+      transform: translateY(-4px) scale(1.02);
+    }
+
+    .dex-num {
+      position: absolute;
+      top: 8px;
+      left: 10px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--mut);
+      background: rgba(19, 17, 38, 0.65);
+      padding: 2px 7px;
+      border-radius: 8px;
+      z-index: 2;
+    }
+
+    .pic {
+      width: 100%;
+      height: 175px;
+      /* Cambiamos aspect-ratio por un height fijo para asegurar el tamaño */
+      border-radius: 16px;
+      background: radial-gradient(circle, rgba(124, 92, 255, 0.22) 0%, rgba(19, 17, 38, 0.4) 75%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 110px;
+      padding: 2px;
+      position: relative;
+    }
+
+    .pic img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.45));
+    }
+
+    .card:hover .pic img {
+      transform: scale(1.08) rotate(2deg);
+    }
+
+    .locked .pic {
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, rgba(12, 10, 26, 0.7) 75%);
+    }
+
+    .locked .pic img {
+      filter: brightness(0) invert(0.18) drop-shadow(0 4px 6px rgba(0, 0, 0, 0.6));
+      opacity: 0.75;
+    }
+
+    .locked .pic span.emoji-art {
+      filter: brightness(0) invert(0.2);
+      opacity: 0.6;
+    }
+
+    .f {
+      font-size: 21px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 2px;
+    }
+
+    .mut {
+      color: var(--mut);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .poke-nick {
+      color: var(--sec);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .tag-ok {
+      background: rgba(44, 230, 138, 0.16);
+      color: var(--ok);
+      border: 1px solid rgba(44, 230, 138, 0.4);
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 999px;
+      margin-top: 2px;
+    }
+
+    .btn-q {
+      font-family: 'Fredoka', sans-serif;
+      background: var(--gold);
+      color: #2b1d00;
+      border: 0;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 0 var(--gold-shadow);
+      transition: transform 0.1s;
+    }
+
+    .btn-q:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 var(--gold-shadow);
+    }
+
+    .card-foot {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      margin-top: 2px;
+    }
+
+    .fusion-table {
+      background: linear-gradient(180deg, #231e47 0%, #181433 100%);
+      border: 3px solid var(--line);
+      border-radius: 24px;
+      padding: 16px;
+      margin: 12px 0 18px;
+      box-shadow: inset 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .slots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--sec);
+      margin-bottom: 14px;
+    }
+
+    .slot {
+      width: 110px;
+      height: 110px;
+      border: 3px dashed #534999;
+      background: rgba(19, 17, 38, 0.65);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 18px;
+      color: var(--mut);
+      padding: 6px;
+      transition: all 0.2s;
+    }
+
+    .slot.filled {
+      border-style: solid;
+      border-color: var(--sec);
+      background: radial-gradient(circle, rgba(0, 212, 255, 0.2), rgba(19, 17, 38, 0.8));
+      color: #fff;
+      animation: popIn 0.25s cubic-bezier(.34, 1.56, .64, 1);
+    }
+
+    .slot img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+    }
+
+    .slot .slot-emoji {
+      font-size: 44px;
+      line-height: 1;
+    }
+
+    @keyframes popIn {
+      0% {
+        transform: scale(0.75);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .msg {
+      min-height: 24px;
+      margin: 10px 0 0;
+      font-weight: 800;
+      font-size: 15px;
+    }
+
+    .ok {
+      color: var(--ok);
+    }
+
+    .bad {
+      color: var(--bad);
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(9, 7, 20, 0.82);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      z-index: 20;
+      overflow-y: auto;
+      animation: fadeIn 0.18s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .box {
+      background: linear-gradient(180deg, #282252 0%, #1b1738 100%);
+      border: 3px solid var(--pri);
+      border-radius: 26px;
+      padding: 20px;
+      max-width: 450px;
+      width: 100%;
+      max-height: 92vh;
+      overflow-y: auto;
+      text-align: center;
+      box-shadow: 0 12px 0 #100d24, 0 24px 50px rgba(0, 0, 0, 0.65);
+      animation: popIn 0.25s cubic-bezier(.34, 1.56, .64, 1);
+    }
+
+    .box.celebrate {
+      border-color: var(--gold);
+      box-shadow: 0 0 40px rgba(255, 204, 51, 0.35), 0 12px 0 #100d24;
+    }
+
+    .opt {
+      font-family: 'Nunito', sans-serif;
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 13px 16px;
+      border-radius: 14px;
+      border: 2px solid var(--line);
+      background: #16132e;
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      box-shadow: 0 4px 0 #0d0b1c;
+      transition: transform 0.08s, border-color 0.15s;
+    }
+
+    .opt:hover {
+      border-color: var(--sec);
+      background: #1e1a40;
+    }
+
+    .opt:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #0d0b1c;
+    }
+
+    .eq {
+      background: #131029;
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      padding: 8px 12px;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--sec);
+      margin: 10px 0;
+    }
+
+    .nom-box {
+      background: rgba(15, 13, 33, 0.85);
+      border: 2px solid var(--line);
+      border-radius: 16px;
+      padding: 10px 14px;
+      margin: 10px 0;
+      text-align: left;
+    }
+
+    .nom-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--gold);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nom-row {
+      display: flex;
+      flex-direction: column;
+      padding: 5px 0;
+      border-bottom: 1px dashed rgba(167, 160, 214, 0.2);
+    }
+
+    .nom-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .nom-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--sec);
+      text-transform: uppercase;
+    }
+
+    .nom-val {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .new-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: #261900;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+      box-shadow: 0 3px 0 var(--gold-shadow);
+    }
+
+    .detail-pic {
+      width: 150px;
+      height: 150px;
+      margin: 4px auto 6px;
+      border-radius: 24px;
+      background: radial-gradient(circle, rgba(124, 92, 255, 0.3) 0%, rgba(19, 17, 38, 0.4) 75%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 100px;
+      line-height: 1;
+      animation: floaty 3s ease-in-out infinite;
+    }
+
+    .detail-pic img {
+      width: 95%;
+      height: 95%;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.5));
+    }
+
+    @media (max-width: 440px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .pic {
+        min-height: 135px;
+      }
+
+      nav button {
+        font-size: 13.5px;
+        padding: 10px 6px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-particles" aria-hidden="true">
+    <div class="bubble" style="width:40px;height:40px;left:12%;animation-duration:11s"></div>
+    <div class="bubble" style="width:24px;height:24px;left:32%;animation-duration:8s;animation-delay:2s"></div>
+    <div class="bubble" style="width:55px;height:55px;left:65%;animation-duration:14s;animation-delay:1s"></div>
+    <div class="bubble" style="width:30px;height:30px;left:85%;animation-duration:9s;animation-delay:3s"></div>
+  </div>
+
+  <div class="wrap" id="app"></div>
+
+  <script>
+    var audioCtx = null;
+    function beep(freq, type, dur, delay) {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        var o = audioCtx.createOscillator();
+        var g = audioCtx.createGain();
+        o.type = type || "sine";
+        o.frequency.value = freq;
+        g.gain.setValueAtTime(0.08, audioCtx.currentTime + (delay || 0));
+        g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (delay || 0) + dur);
+        o.connect(g);
+        g.connect(audioCtx.destination);
+        o.start(audioCtx.currentTime + (delay || 0));
+        o.stop(audioCtx.currentTime + (delay || 0) + dur);
+      } catch (e) { }
+    }
+    function sfxClick() { beep(520, "triangle", 0.07, 0); }
+    function sfxOk() { beep(523, "triangle", 0.12, 0); beep(659, "triangle", 0.12, 0.09); beep(784, "triangle", 0.2, 0.18); }
+    function sfxBad() { beep(220, "sawtooth", 0.15, 0); beep(170, "sawtooth", 0.22, 0.12); }
+    function sfxDiscovery() {
+      beep(523, "triangle", 0.1, 0);
+      beep(659, "triangle", 0.1, 0.08);
+      beep(784, "triangle", 0.1, 0.16);
+      beep(1046, "triangle", 0.35, 0.24);
+    }
+
+    // === REACTIVOS CON APODOS TIPO POKÉMON ===
+    var ITEMS = [
+      {
+        id: "agua", name: "Agua", nick: "Hydro-chan", f: "H₂O", emoji: "💧", img: "img/7.png", tipo: "agua",
+        q: "¿Qué compuesto se obtiene al sumar un anhídrido + agua?",
+        o: ["Un hidróxido", "Un ácido oxácido", "Una sal haloidea"], a: 1
+      },
+      {
+        id: "so3", name: "Anhídrido sulfúrico", nick: "Sulfonator", f: "SO₃", emoji: "🟡", img: "img/2.png", tipo: "oxido",
+        q: "¿Con qué valencia trabaja el azufre (S) en el SO₃?",
+        o: ["Valencia 2", "Valencia 4", "Valencia 6"], a: 2
+      },
+      {
+        id: "so2", name: "Anhídrido sulfuroso", nick: "Smoggy", f: "SO₂", emoji: "🟠", img: "img/15.png", tipo: "oxido",
+        q: "Si el azufre usa valencia 4, su anhídrido termina en…",
+        o: ["-oso (anhídrido sulfuroso)", "-ico (anhídrido sulfúrico)", "hipo- -oso"], a: 0
+      },
+      {
+        id: "n2o5", name: "Anhídrido nítrico", nick: "Nitrogenus", f: "N₂O₅", emoji: "🔵", img: "img/9.png", tipo: "oxido",
+        q: "¿Cuál es la valencia del nitrógeno en el N₂O₅?",
+        o: ["+3", "+5", "+1"], a: 1
+      },
+      {
+        id: "co2", name: "Anhídrido carbónico", nick: "Carbonox", f: "CO₂", emoji: "⚫", img: "img/10.png", tipo: "oxido",
+        q: "¿Qué elementos están presentes en todo ácido oxácido?",
+        o: ["Metal + Oxígeno", "Hidrógeno + No metal + Oxígeno", "Solo Hidrógeno + No metal"], a: 1
+      },
+      {
+        id: "cl2o7", name: "Anhídrido perclórico", nick: "Chloronite", f: "Cl₂O₇", emoji: "🟢", img: "img/12.png", tipo: "oxido",
+        q: "Cuando el cloro trabaja con su valencia máxima (+7), usa el prefijo y sufijo…",
+        o: ["hipo- ... -oso", "per- ... -ico", "-oso"], a: 1
+      },
+      {
+        id: "cl2o", name: "Anhídrido hipocloroso", nick: "Cloritoys", f: "Cl₂O", emoji: "🧪", img: "img/8.png", tipo: "oxido",
+        q: "¿Qué valencia tiene el cloro en el Cl₂O?",
+        o: ["+1 (la menor de todas)", "+5", "+7"], a: 0
+      },
+      {
+        id: "br2o5", name: "Anhídrido brómico", nick: "Bromander", f: "Br₂O₅", emoji: "🔴", img: "img/13.png", tipo: "oxido",
+        q: "¿Cuál es el símbolo del bromo y su valencia en Br₂O₅?",
+        o: ["B, valencia +3", "Br, valencia +5", "Bo, valencia +7"], a: 1
+      },
+      {
+        id: "p2o5", name: "Anhídrido fosfórico", nick: "Phosphor", f: "P₂O₅", emoji: "🟣", img: "img/14.png", tipo: "oxido",
+        q: "¿Cuántas moléculas de agua (H₂O) se suman al P₂O₅ para formar el ácido ortofosfórico?",
+        o: ["1 molécula de H₂O", "2 moléculas de H₂O", "3 moléculas de H₂O"], a: 2
+      }
+    ];
+
+    // === ÁCIDOS OXÁCIDOS CON SUS 3 NOMENCLATURAS Y APODOS ===
+    var RECIPES = {
+      so3: {
+        name: "Ácido sulfúrico", nick: "Sulfoknight",
+        f: "H₂SO₄",
+        eq: "SO₃ + H₂O → H₂SO₄",
+        nom: {
+          trad: "Ácido sulfúrico",
+          stock: "Ácido tetraoxosulfúrico (VI)",
+          sist: "Tetraoxosulfato (VI) de hidrógeno"
+        },
+        uso: "Usado en baterías de autos, fertilizantes y procesos industriales.",
+        emoji: "🟡",
+        img: "img/6.png"
+      },
+      so2: {
+        name: "Ácido sulfuroso", nick: "Sulfonix",
+        f: "H₂SO₃",
+        eq: "SO₂ + H₂O → H₂SO₃",
+        nom: {
+          trad: "Ácido sulfuroso",
+          stock: "Ácido trioxosulfúrico (IV)",
+          sist: "Trioxosulfato (IV) de hidrógeno"
+        },
+        uso: "Se emplea como conservante antioxidante y blanqueador suave.",
+        emoji: "🟠",
+        img: "img/16.png"
+      },
+      n2o5: {
+        name: "Ácido nítrico", nick: "Nitrostrike",
+        f: "HNO₃",
+        eq: "N₂O₅ + H₂O → 2 HNO₃",
+        nom: {
+          trad: "Ácido nítrico",
+          stock: "Ácido trioxonítrico (V)",
+          sist: "Trioxonitrato (V) de hidrógeno"
+        },
+        uso: "Fundamental para fabricar abonos nitrogenados y reactivos de laboratorio.",
+        emoji: "🔵",
+        img: "img/17.png"
+      },
+      co2: {
+        name: "Ácido carbónico", nick: "Bubbly-H",
+        f: "H₂CO₃",
+        eq: "CO₂ + H₂O → H₂CO₃",
+        nom: {
+          trad: "Ácido carbónico",
+          stock: "Ácido trioxocarbónico (IV)",
+          sist: "Trioxocarbonato (IV) de hidrógeno"
+        },
+        uso: "Responsable del gas efervescente en refrescos y agua mineral.",
+        emoji: "⚫",
+        img: "img/18.png"
+      },
+      cl2o7: {
+        name: "Ácido perclórico", nick: "Perchlorix",
+        f: "HClO₄",
+        eq: "Cl₂O₇ + H₂O → 2 HClO₄",
+        nom: {
+          trad: "Ácido perclórico",
+          stock: "Ácido tetraoxoclórico (VII)",
+          sist: "Tetraoxoclorato (VII) de hidrógeno"
+        },
+        uso: "Uno de los oxácidos más fuertes; usado en química analítica.",
+        emoji: "🟢",
+        img: "img/19.png"
+      },
+      cl2o: {
+        name: "Ácido hipocloroso", nick: "Hypoclor",
+        f: "HClO",
+        eq: "Cl₂O + H₂O → 2 HClO",
+        nom: {
+          trad: "Ácido hipocloroso",
+          stock: "Ácido oxoclórico (I)",
+          sist: "Oxoclorato (I) de hidrógeno"
+        },
+        uso: "Potente desinfectante usado en potabilización de agua.",
+        emoji: "🧪",
+        img: "img/20.png"
+      },
+      br2o5: {
+        name: "Ácido brómico", nick: "Bromacid",
+        f: "HBrO₃",
+        eq: "Br₂O₅ + H₂O → 2 HBrO₃",
+        nom: {
+          trad: "Ácido brómico",
+          stock: "Ácido trioxobrómico (V)",
+          sist: "Trioxobromato (V) de hidrógeno"
+        },
+        uso: "Agente oxidante utilizado en síntesis química.",
+        emoji: "🔴",
+        img: "img/21.png"
+      },
+      p2o5: {
+        name: "Ácido fosfórico", nick: "Phosphoking",
+        f: "H₃PO₄",
+        eq: "P₂O₅ + 3 H₂O → 2 H₃PO₄",
+        nom: {
+          trad: "Ácido ortofosfórico (o fosfórico)",
+          stock: "Ácido tetraoxofosfórico (V)",
+          sist: "Tetraoxofosfato (V) de hidrógeno"
+        },
+        uso: "Presente en bebidas de cola, fertilizantes y tratamientos dentales.",
+        emoji: "🟣",
+        img: "img/22.png"
+      }
+    };
+
+    // === ESTADO ===
+    var S = { screen: "home", tab: "unlock", unlocked: [], dex: [], pick: [], msg: "", ok: true, quiz: null, newDiscovery: null, detail: null, detailKind: null };
+    try { var sv = JSON.parse(localStorage.getItem("oxidex") || "null"); if (sv) { S.unlocked = sv.unlocked || []; S.dex = sv.dex || []; } } catch (e) { }
+    function save() { try { localStorage.setItem("oxidex", JSON.stringify({ unlocked: S.unlocked, dex: S.dex })); } catch (e) { } }
+    function item(id) { return ITEMS.filter(function (i) { return i.id === id; })[0]; }
+    function pic(e, img) { return '<div class="pic">' + (img ? '<img src="' + img + '" alt="">' : '<span class="emoji-art">' + e + '</span>') + '</div>'; }
+    function detailPic(e, img) { return '<div class="detail-pic">' + (img ? '<img src="' + img + '" alt="">' : '<span>' + e + '</span>') + '</div>'; }
+
+    function renderNomenclaturas(r) {
+      return '<div class="nom-box">' +
+        '<div class="nom-title">🏷️ Nomenclaturas del Oxácido</div>' +
+        '<div class="nom-row"><span class="nom-tag">Tradicional</span><span class="nom-val">' + r.nom.trad + '</span></div>' +
+        '<div class="nom-row"><span class="nom-tag">Stock</span><span class="nom-val">' + r.nom.stock + '</span></div>' +
+        '<div class="nom-row"><span class="nom-tag">Sistemática (IUPAC)</span><span class="nom-val">' + r.nom.sist + '</span></div>' +
+        '</div>';
+    }
+
+    function render() {
+      var h = "";
+      var totalRecipes = Object.keys(RECIPES).length;
+
+      if (S.screen === "home") {
+        h = '<div class="home">' +
+          '<div class="logo-badge">🧪</div>' +
+          '<h1 class="game-title">OXIDEX</h1>' +
+          '<p class="subtitle">Captura anhídridos, fusiónalos con agua en el laboratorio y domina las nomenclaturas de los ácidos oxácidos.</p>' +
+          '<button class="btn play-btn" onclick="sfxOk();go(\'game\')">▶ ¡JUGAR AHORA!</button>' +
+          '</div>';
+      } else {
+        h = '<div class="hud">' +
+          '<div class="hud-brand" onclick="sfxClick();go(\'home\')">🧪 <span>OXIDEX</span></div>' +
+          '<div class="hud-stats">' +
+          '<div class="pill cyan">🔓 ' + S.unlocked.length + '/' + ITEMS.length + '</div>' +
+          '<div class="pill gold">⭐ ' + S.dex.length + '/' + totalRecipes + '</div>' +
+          '</div></div>';
+
+        h += '<nav>' +
+          '<button class="btn ' + (S.tab === "unlock" ? "" : "ghost") + '" onclick="sfxClick();tab(\'unlock\')">🔓 Capturar</button>' +
+          '<button class="btn ' + (S.tab === "lab" ? "" : "ghost") + '" onclick="sfxClick();tab(\'lab\')">⚗️ Fusionar</button>' +
+          '<button class="btn ' + (S.tab === "dex" ? "" : "ghost") + '" onclick="sfxClick();tab(\'dex\')">📖 Oxidex (' + S.dex.length + '/' + totalRecipes + ')</button>' +
+          '</nav>';
+
+        if (S.tab === "unlock") {
+          h += '<h2>🔓 Captura reactivos</h2><p class="mut" style="margin-top:0;text-align:center">Supera el reto de ácidos oxácidos para liberar cada criatura.</p><div class="grid">';
+          ITEMS.forEach(function (i, idx) {
+            var u = S.unlocked.indexOf(i.id) > -1;
+            var num = (idx + 1 < 10 ? '#0' : '#') + (idx + 1);
+            h += '<div class="card ' + (u ? "" : "locked") + '">' +
+              '<span class="dex-num">' + num + '</span>' +
+              pic(i.emoji, i.img) +
+              '<div class="f">' + (u ? i.f : "???") + '</div>' +
+              '<div class="mut">' + (u ? i.name : "Silueta misteriosa") + '</div>' +
+              '<div class="poke-nick">' + (u ? '(' + i.nick + ')' : '(???)') + '</div>' +
+              (u
+                ? '<div class="tag-ok">✔ CAPTURADO</div>'
+                : '<button class="btn" style="margin-top:4px;padding:8px 14px;font-size:14px" onclick="sfxClick();ask(\'' + i.id + '\')">⚡ Desbloquear</button>') +
+              '</div>';
+          });
+          h += '</div>';
+        }
+
+        if (S.tab === "lab") {
+          h += '<h2>⚗️ Mesa de Fusión</h2><p class="mut" style="margin-top:0;text-align:center">Selecciona un anhídrido y el agua (H₂O) para formar un ácido oxácido.</p>';
+          var itA = S.pick[0] ? item(S.pick[0]) : null;
+          var itB = S.pick[1] ? item(S.pick[1]) : null;
+
+          h += '<div class="fusion-table">' +
+            '<div class="slots">' +
+            '<div class="slot ' + (itA ? 'filled' : '') + '">' +
+            (itA ? (itA.img ? '<img src="' + itA.img + '" alt="">' : '<span class="slot-emoji">' + itA.emoji + '</span>') + '<span>' + itA.f + '</span>' : '<span>?</span>') +
+            '</div>' +
+            '<span>+</span>' +
+            '<div class="slot ' + (itB ? 'filled' : '') + '">' +
+            (itB ? (itB.img ? '<img src="' + itB.img + '" alt="">' : '<span class="slot-emoji">' + itB.emoji + '</span>') + '<span>' + itB.f + '</span>' : '<span>?</span>') +
+            '</div>' +
+            '</div>' +
+            '<div style="text-align:center"><button class="btn fuse-btn" ' + (S.pick.length < 2 ? "disabled" : "") + ' onclick="fuse()">✨ ¡FUSIONAR!</button></div>' +
+            (S.msg ? '<div class="msg ' + (S.ok ? "ok" : "bad") + '" style="text-align:center">' + S.msg + '</div>' : '') +
+            '</div>';
+
+          if (!S.unlocked.length) h += '<p class="mut" style="text-align:center">Aún no tienes criaturas. Ve a «Capturar» para conseguir algunas.</p>';
+          h += '<div class="grid">';
+          S.unlocked.forEach(function (id, idx) {
+            var i = item(id);
+            var selected = S.pick.indexOf(id) > -1;
+            var num = (idx + 1 < 10 ? '#0' : '#') + (idx + 1);
+            h += '<div class="card ' + (selected ? "sel" : "") + '" onclick="sfxClick();pick(\'' + id + '\')" style="cursor:pointer">' +
+              '<span class="dex-num">' + (selected ? '⚡ LISTO' : num) + '</span>' +
+              pic(i.emoji, i.img) +
+              '<div class="f">' + i.f + '</div>' +
+              '<div class="mut">' + i.name + '</div>' +
+              '<div class="poke-nick">(' + i.nick + ')</div>' +
+              '</div>';
+          });
+          h += '</div>';
+        }
+
+        if (S.tab === "dex") {
+          h += '<h2>📖 Tu Oxidex</h2><p class="mut" style="margin-top:0;text-align:center">Toca «?» para ver la fórmula y las 3 nomenclaturas del ácido oxácido.</p><div class="grid">';
+          Object.keys(RECIPES).forEach(function (k, idx) {
+            var r = RECIPES[k], got = S.dex.indexOf(k) > -1;
+            var oxNum = (idx + 1 < 10 ? 'OX-0' : 'OX-') + (idx + 1);
+            h += '<div class="card ' + (got ? "" : "locked") + '">' +
+              '<span class="dex-num">' + oxNum + '</span>' +
+              pic(r.emoji, r.img) +
+              (got ? '<div class="f" style="font-size:18px">' + r.f + '</div>' +
+                '<div class="mut" style="font-size:12px">' + r.name + '</div>' +
+                '<div class="poke-nick">(' + r.nick + ')</div>' : '') +
+              '<div class="card-foot">' +
+              (got
+                ? '<button class="btn-q" onclick="sfxClick();verDetalle(\'' + k + '\',\'recipe\')" title="Ver nomenclaturas">?</button>'
+                : '<span class="mut">🔒 Sin descubrir</span>') +
+              '</div></div>';
+          });
+          h += '</div>';
+        }
+      }
+
+      // === MODAL QUIZ ===
+      if (S.quiz) {
+        var i = item(S.quiz);
+        h += '<div class="modal"><div class="box">' +
+          '<div class="new-badge">⚡ RETO DE CAPTURA</div>' +
+          '<h2>' + i.f + ' · ' + i.name + '</h2>' +
+          '<p class="poke-nick" style="font-size:14px;margin-bottom:8px">Apodo: (' + i.nick + ')</p>' +
+          '<p style="font-size:16px;font-weight:700">' + i.q + '</p>';
+        i.o.forEach(function (t, n) { h += '<button class="opt" onclick="answer(' + n + ')">' + String.fromCharCode(65 + n) + ') ' + t + '</button>'; });
+        h += '<div class="msg ' + (S.ok ? "ok" : "bad") + '">' + S.msg + '</div>' +
+          '<button class="btn ghost" onclick="sfxClick();closeQ()">Huir</button></div></div>';
+      }
+
+      // === MODAL DETALLE POKÉDEX ===
+      if (S.detail) {
+        var r = RECIPES[S.detail];
+        h += '<div class="modal"><div class="box">' +
+          '<div class="new-badge">📖 FICHA OXIDEX</div>' +
+          detailPic(r.emoji, r.img) +
+          '<h2>' + r.name + ' <span style="font-size:18px;color:var(--sec)">(' + r.nick + ')</span></h2>' +
+          '<div class="f" style="font-size:26px;color:var(--gold)">' + r.f + '</div>' +
+          '<div class="eq">' + r.eq + '</div>' +
+          renderNomenclaturas(r) +
+          '<p class="mut" style="font-size:13px;margin-top:6px">' + r.uso + '</p>' +
+          '<button class="btn" style="margin-top:6px" onclick="sfxClick();closeDetalle()">¡Entendido!</button>' +
+          '</div></div>';
+      }
+
+      // === MODAL DE NUEVO DESCUBRIMIENTO ===
+      if (S.newDiscovery) {
+        var r = RECIPES[S.newDiscovery];
+        h += '<div class="modal"><div class="box celebrate">' +
+          '<div class="new-badge">🎉 ¡NUEVO OXÁCIDO DESCUBIERTO!</div>' +
+          detailPic(r.emoji, r.img) +
+          '<h2>' + r.name + ' <span style="font-size:18px;color:var(--sec)">(' + r.nick + ')</span></h2>' +
+          '<div class="f" style="font-size:26px;color:var(--gold)">' + r.f + '</div>' +
+          '<div class="eq">' + r.eq + '</div>' +
+          renderNomenclaturas(r) +
+          '<p class="mut" style="font-size:13px;margin-top:6px">' + r.uso + '</p>' +
+          '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px">' +
+          '<button class="btn play-btn" style="font-size:15px;padding:11px 18px" onclick="sfxClick();verEnDex()">📖 Ver en Oxidex</button>' +
+          '<button class="btn ghost" style="font-size:15px;padding:11px 16px" onclick="sfxClick();cerrarDescubrimiento()">Seguir jugando</button>' +
+          '</div></div></div>';
+      }
+
+      document.getElementById("app").innerHTML = h;
+    }
+
+    function go(s) { S.screen = s; render(); }
+    function tab(t) { S.tab = t; S.msg = ""; S.pick = []; S.newDiscovery = null; S.detail = null; render(); }
+    function ask(id) { S.quiz = id; S.msg = ""; render(); }
+    function closeQ() { S.quiz = null; S.msg = ""; render(); }
+
+    function verDetalle(id, kind) { S.detail = id; S.detailKind = kind; render(); }
+    function closeDetalle() { S.detail = null; S.detailKind = null; render(); }
+
+    function answer(n) {
+      var i = item(S.quiz);
+      if (n === i.a) {
+        sfxOk();
+        if (S.unlocked.indexOf(i.id) < 0) S.unlocked.push(i.id);
+        save(); S.quiz = null; S.msg = ""; render();
+      } else {
+        sfxBad();
+        S.ok = false; S.msg = "❌ ¡Fallaste! Inténtalo de nuevo."; render();
+      }
+    }
+
+    function pick(id) {
+      var p = S.pick.indexOf(id);
+      if (p > -1) S.pick.splice(p, 1); else if (S.pick.length < 2) S.pick.push(id);
+      S.msg = ""; render();
+    }
+
+    function fuse() {
+      var ids = S.pick, ox = null, ag = false;
+      ids.forEach(function (id) { if (id === "agua") ag = true; else ox = id; });
+      if (ag && ox && RECIPES[ox]) {
+        var r = RECIPES[ox];
+        var isNew = S.dex.indexOf(ox) < 0;
+        if (isNew) S.dex.push(ox);
+        save(); S.ok = true;
+        if (isNew) {
+          sfxDiscovery();
+          S.msg = "";
+          S.newDiscovery = ox;
+        } else {
+          sfxOk();
+          S.msg = "✅ Ya tienes a " + r.name + " (" + r.f + ") en tu Oxidex.";
+        }
+      } else {
+        sfxBad();
+        S.ok = false; S.msg = "💥 ¡Sin reacción! Mezcla un anhídrido + agua.";
+      }
+      S.pick = []; render();
+    }
+
+    function verEnDex() {
+      S.newDiscovery = null;
+      S.tab = "dex";
+      render();
+    }
+    function cerrarDescubrimiento() {
+      S.newDiscovery = null;
+      S.pick = []; S.msg = "";
+      render();
+    }
+    render();
+  </script>
+</body>
+
+</html>
